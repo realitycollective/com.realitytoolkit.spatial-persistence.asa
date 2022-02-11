@@ -1,9 +1,8 @@
 {
-  "name": "com.xrtk.spatial-persistence.asa",
-  "displayName": "XRTK.SpatialPersistence.ASA",
-  "description": "The Azure Spatial Anchor components for the Mixed Reality Toolkit.",
+  "name": "com.realitytoolkit.spatial-persistence.asa",
+  "displayName": "RealityToolkit.SpatialPersistence.ASA",
+  "description": "The Azure Spatial Anchor components for the Reality Toolkit by the Reality Collective",
   "keywords": [
-    "xrtk",
     "vr",
     "ar",
     "xr",
@@ -13,17 +12,24 @@
     "spatial",
     "anchors"
   ],
-  "version": "0.3.0-preview.15",
-  "unity": "2020.3",
+  "version": "1.0.0-preview.1",
+  "unity": "2020.2",
+  "homepage": "https://github.com/realitycollective",
+  "bugs": {
+    "url": "https://github.com/realitycollective/realitytoolkit.dev/issues"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/XRTK/com.xrtk.spatial-persistence.asa.git"
+    "url": "git+https://github.com/realitycollective/com.realitytoolkit.spatial-persistence.asa.git"
   },
-  "author": "XRTK Team (https://github.com/XRTK)",
+  "author": {
+    "name": "Reality Collective",
+    "email": "realitycollectivedev@gmail.com",
+    "url": "https://github.com/realitycollective"
+  },
   "dependencies": {
-    "com.xrtk.spatial-persistence": "0.3.0-preview.13",
-    "com.xrtk.wmr": "0.3.0-preview.8",
+    "com.realitytoolkit.spatial-persistence": "1.0.0-preview.1",
     "com.microsoft.azure.spatial-anchors-sdk.core": "2.11.0"
   },
   "profiles": [
