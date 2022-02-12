@@ -32,10 +32,10 @@
     "com.realitytoolkit.spatial-persistence": "1.0.0-preview.1",
     "com.microsoft.azure.spatial-anchors-sdk.core": "2.11.0"
   },
-  "profiles": [
+  "assets": [
     {
-      "displayName": "Default Profiles",
-      "path": "Profiles~/"
+      "displayName": "Default Assets",
+      "path": "Assets~/"
     }
   ]
 }
