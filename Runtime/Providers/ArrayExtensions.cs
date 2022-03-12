@@ -7,6 +7,10 @@ namespace XRTK.Providers.SpatialPersistence
 {
     internal static class ArrayExtensions
     {
+        /// <summary>
+        /// A Simple array extension to turn an array of <see cref="Guid"/> in to an array of <see cref="string"/>
+        /// </summary>
+        /// <param name="input"></param>
         public static string[] ToStringArray(this Guid[] input)
         {
             var newArray = new string[input.Length];
