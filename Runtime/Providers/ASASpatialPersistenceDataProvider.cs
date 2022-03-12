@@ -288,7 +288,6 @@ namespace XRTK.Providers.SpatialPersistence
                 {
                     detectedAnchors.Add(cloudAnchorGuid, cloudAnchor);
                     anchoredObject.name = $"Cloud Anchor [{cloudAnchor.Identifier}]";
-                    Debug.LogWarning($"[Anchor Created] {cloudAnchor.Identifier} @ {anchoredObject.transform.position}");
                     CreateAnchorSucceeded?.Invoke(cloudAnchorGuid, anchoredObject);
                     return cloudAnchorGuid;
                 }
@@ -348,10 +347,7 @@ namespace XRTK.Providers.SpatialPersistence
 
             if (ids.Length > 0)
             {
-                if (currentWatcher != null)
-                {
-                    currentWatcher.Stop();
-                }
+                currentWatcher?.Stop();
 
                 if (cloudManager != null &&
                     cloudManager.Session != null &&
