@@ -14,9 +14,9 @@
   ],
   "version": "1.0.0-preview.1",
   "unity": "2020.3",
-  "homepage": "https://github.com/realitycollective",
+  "homepage": "https://realitycollective.io/",
   "bugs": {
-    "url": "https://github.com/realitycollective/realitytoolkit.dev/issues"
+    "url": "https://github.com/realitycollective/com.realitytoolkit.spatial-persistence/issues"
   },
   "license": "MIT",
   "repository": {
@@ -30,11 +30,5 @@
   },
   "dependencies": {
     "com.realitytoolkit.spatial-persistence": "1.0.0-preview.1"
-  },
-  "assets": [
-    {
-      "displayName": "Default Assets",
-      "path": "Assets~/"
-    }
-  ]
+  }
 }

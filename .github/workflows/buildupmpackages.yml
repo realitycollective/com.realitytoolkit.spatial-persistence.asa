@@ -33,16 +33,6 @@ jobs:
       build-target: windows
       unityversion: ${{ needs.validate-environment.outputs.unityversion }}
 
-  # Install the Unity editor if not available
-  Install-Unity-Editor:
-    if: ${{ needs.Setup-Unity.outputs.unityeditorinstalled }}  == '0'
-    needs: Setup-Unity
-    uses: realitycollective/reusableworkflows/.github/workflows/installunityeditor.yml@main
-    name: Install Unity Editor
-    with:
-      build-target: windows
-      unityversion: ${{ needs.Setup-Unity.outputs.unityeditorversion }}      
-
   # Run Unity unit tests defined in the package
   Run-Unit-Tests:
     name: Run Unity Unit Tests
@@ -51,7 +41,7 @@ jobs:
     with:
       build-target: windows
       unityversion: ${{ needs.Setup-Unity.outputs.unityeditorversion }}
-      dependencies: '[{"ASADependencies": "github.com/realitycollective/com.realitytoolkit.spatial-persistence.asa.git"},{"rcdevelopment": "github.com/realitycollective/com.realitytoolkit.spatial-persistence.git"},{"rcdevelopment": "github.com/realitycollective/com.realitytoolkit.core.git"}]'
+      dependencies: '[{"ASADependencies": "github.com/realitycollective/com.realitytoolkit.spatial-persistence.asa.git"},{"development": "github.com/realitycollective/com.realitycollective.buildtools.git"},{"development": "github.com/realitycollective/com.realitytoolkit.spatial-persistence.git"},{"development": "github.com/realitycollective/com.realitycollective.utilities.git"},{"development": "github.com/realitycollective/com.realitytoolkit.service-framework.git"}]'
     secrets:
       GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
       GIT_PAT: ${{ secrets.GIT_PAT }}
