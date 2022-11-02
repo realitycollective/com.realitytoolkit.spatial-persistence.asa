@@ -29,8 +29,7 @@
     "url": "https://github.com/realitycollective"
   },
   "dependencies": {
-    "com.realitytoolkit.spatial-persistence": "1.0.0-preview.1",
-    "com.microsoft.azure.spatial-anchors-sdk.core": "2.11.0"
+    "com.realitytoolkit.spatial-persistence": "1.0.0-preview.1"
   },
   "assets": [
     {

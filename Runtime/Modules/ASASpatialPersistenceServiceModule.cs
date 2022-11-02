@@ -22,17 +22,16 @@ namespace RealityToolkit.Providers.SpatialPersistence
     [RuntimePlatform(typeof(AndroidPlatform))]
     [RuntimePlatform(typeof(UniversalWindowsPlatform))]
     [System.Runtime.InteropServices.Guid("02963BCE-8519-4923-AE59-833953F6F13C")]
-    public class ASASpatialPersistenceDataProvider : BaseServiceModule, ISpatialPersistenceDataProvider
+    public class ASASpatialPersistenceServiceModule : BaseServiceModule, ISpatialPersistenceServiceModule
     {
-        private readonly ISpatialPersistenceSystem spatialPersistenceSystem = null;
-
+        #region Private Properties
+        private readonly ISpatialPersistenceService spatialPersistenceSystem = null;
         private SpatialAnchorManager cloudManager;
         private AnchorLocateCriteria anchorLocateCriteria;
         private CloudSpatialAnchorWatcher currentWatcher;
-
         private Dictionary<Guid, CloudSpatialAnchor> detectedAnchors = new Dictionary<Guid, CloudSpatialAnchor>();
 
-        public SpatialAnchorManager CloudManager
+        private SpatialAnchorManager CloudManager
         {
             get
             {
@@ -58,18 +57,17 @@ namespace RealityToolkit.Providers.SpatialPersistence
                 return cloudManager;
             }
         }
+        #endregion Private Properties
 
-        /// <inheritdoc />
-        public bool IsRunning => CloudManager != null && CloudManager.IsSessionStarted;
-
-        public ASASpatialPersistenceDataProvider(string name, uint priority, BaseProfile profile, ISpatialPersistenceSystem parentService)
+        #region Constructor
+        public ASASpatialPersistenceServiceModule(string name, uint priority, BaseProfile profile, ISpatialPersistenceService parentService)
             : base(name, priority, null, parentService)
         {
             spatialPersistenceSystem = parentService;
         }
+        #endregion Constructor
 
-        #region BaseExtensionService Implementation
-
+        #region BaseService Implementation
         /// <inheritdoc />
         public override void Initialize()
         {
@@ -100,10 +98,11 @@ namespace RealityToolkit.Providers.SpatialPersistence
             base.Destroy();
 
         }
-
-        #endregion BaseExtensionService Implementation
+        #endregion BaseService Implementation
 
         #region IMixedRealitySpatialPersistenceDataProvider Implementation
+        /// <inheritdoc />
+        public bool IsRunning => CloudManager != null && CloudManager.IsSessionStarted;
 
         /// <inheritdoc />
         public async Task StartSpatialPersistenceProvider()
@@ -120,49 +119,6 @@ namespace RealityToolkit.Providers.SpatialPersistence
                 ARSession.stateChanged += ARSession_stateChanged;
             }
 #endif
-        }
-
-        private async Task StartASASession()
-        {
-            if (CloudManager == null)
-            {
-                var message = $"Unable to locate either the {typeof(SpatialAnchorManager)} or {typeof(ARSession)} in the scene, service cannot initialize";
-                SpatialPersistenceError?.Invoke(message);
-                return;
-            }
-
-            await Awaiters.UnityMainThread;
-
-            if (CloudManager.Session == null)
-            {
-                // Creates a new session if one does not exist
-                await CloudManager.CreateSessionAsync();
-            }
-            await CloudManager.StartSessionAsync();
-
-            if (CloudManager.Session != null && CloudManager.IsSessionStarted)
-            {
-                anchorLocateCriteria = new AnchorLocateCriteria();
-
-                // Register for Azure Spatial Anchor events
-                CloudManager.AnchorLocated += CloudManager_AnchorLocated;
-                SessionStarted?.Invoke();
-                Debug.Log($"{nameof(ASASpatialPersistenceDataProvider)}.{nameof(StartASASession)} successful");
-            }
-            else
-            {
-                const string errorMessage = "Unable to start the Spatial Persistence provider, is it configured correctly?";
-                SpatialPersistenceError?.Invoke(errorMessage);
-            }
-
-        }
-
-        private async void ARSession_stateChanged(ARSessionStateChangedEventArgs obj)
-        {
-            if (obj.state == ARSessionState.SessionTracking && !IsRunning)
-            {
-                await StartASASession();
-            }
         }
 
         /// <inheritdoc />
@@ -182,59 +138,6 @@ namespace RealityToolkit.Providers.SpatialPersistence
             // Resets the current session if there is one, and waits for any active queries to be stopped
             await CloudManager.ResetSessionAsync();
             SessionEnded?.Invoke();
-        }
-
-        /// <summary>
-        /// Anchor located by the ASA Cloud watcher service, returns the ID reported by the service for the anchor via <see cref="AnchorLocated"/> event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void CloudManager_AnchorLocated(object sender, AnchorLocatedEventArgs args)
-        {
-            try
-            {
-                if (Guid.TryParse(args.Identifier, out var anchorGuid))
-                {
-                    // If an anchor is found but has no Anchor data, create a new CloudSpatialAnchor
-                    if (!detectedAnchors.ContainsKey(anchorGuid))
-                    {
-                        detectedAnchors.Add(anchorGuid, args.Anchor);
-                    }
-
-                    // Android and iOS require coordinate from stored Anchor
-#if UNITY_ANDROID || UNITY_IOS
-                    var detectedAnchorPose = detectedAnchors[anchorGuid].GetPose();
-#else
-                    var detectedAnchorPose = Pose.identity;
-#endif
-
-                    var anchoredObject = new GameObject($"Anchor - [{anchorGuid}]");
-                    anchoredObject.transform.SetPositionAndRotation(detectedAnchorPose.position, detectedAnchorPose.rotation);
-
-                    var attachedAnchor = anchoredObject.EnsureComponent<CloudNativeAnchor>();
-                    attachedAnchor.CloudToNative(detectedAnchors[anchorGuid]);
-
-                    AnchorLocated?.Invoke(anchorGuid, anchoredObject);
-                }
-                else
-                {
-                    var errorMessage = $"Anchor returned from service but Identifier was invalid [{args.Identifier}]";
-                    SpatialPersistenceError?.Invoke(errorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (Guid.TryParse(args.Identifier, out var anchorGuid))
-                {
-                    var errorMessage = $"An anchor [{anchorGuid}] was returned with invalid data\nError reported as {ex}";
-                    AnchorLocatedError?.Invoke(anchorGuid, errorMessage);
-                }
-                else
-                {
-                    var errorMessage = $"An Error Occurred retrieving the Anchor, Anchor ignored\n{ex}";
-                    SpatialPersistenceError?.Invoke(errorMessage);
-                }
-            }
         }
 
         /// <inheritdoc />
@@ -519,5 +422,112 @@ namespace RealityToolkit.Providers.SpatialPersistence
         #endregion Events
 
         #endregion IMixedRealitySpatialPersistenceDataProvider Implementation
+
+        #region Private Methods
+        /// <summary>
+        /// Internal method to start the Azure Spatial Anchors module
+        /// </summary>
+        /// <returns></returns>
+        private async Task StartASASession()
+        {
+            if (CloudManager == null)
+            {
+                var message = $"Unable to locate either the {typeof(SpatialAnchorManager)} or {typeof(ARSession)} in the scene, service cannot initialize";
+                SpatialPersistenceError?.Invoke(message);
+                return;
+            }
+
+            await Awaiters.UnityMainThread;
+
+            if (CloudManager.Session == null)
+            {
+                // Creates a new session if one does not exist
+                await CloudManager.CreateSessionAsync();
+            }
+
+            await CloudManager.StartSessionAsync();
+
+            if (CloudManager.Session != null && CloudManager.IsSessionStarted)
+            {
+                anchorLocateCriteria = new AnchorLocateCriteria();
+
+                // Register for Azure Spatial Anchor events
+                CloudManager.AnchorLocated += CloudManager_AnchorLocated;
+                SessionStarted?.Invoke();
+                Debug.Log($"{nameof(ISpatialPersistenceServiceModule)}.{nameof(StartASASession)} successful");
+            }
+            else
+            {
+                const string errorMessage = "Unable to start the Spatial Persistence provider, is it configured correctly?";
+                SpatialPersistenceError?.Invoke(errorMessage);
+            }
+
+        }
+
+        /// <summary>
+        /// For Android we need to wait until the ARSession has started before initialising Anchors
+        /// </summary>
+        /// <param name="obj"></param>
+        private async void ARSession_stateChanged(ARSessionStateChangedEventArgs obj)
+        {
+            if (obj.state == ARSessionState.SessionTracking && !IsRunning)
+            {
+                await StartASASession();
+            }
+        }
+
+        /// <summary>
+        /// Anchor located by the ASA Cloud watcher service, returns the ID reported by the service for the anchor via <see cref="AnchorLocated"/> event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void CloudManager_AnchorLocated(object sender, AnchorLocatedEventArgs args)
+        {
+            try
+            {
+                if (Guid.TryParse(args.Identifier, out var anchorGuid))
+                {
+                    // If an anchor is found but has no Anchor data, create a new CloudSpatialAnchor
+                    if (!detectedAnchors.ContainsKey(anchorGuid))
+                    {
+                        detectedAnchors.Add(anchorGuid, args.Anchor);
+                    }
+
+                    // Android and iOS require coordinate from stored Anchor
+#if UNITY_ANDROID || UNITY_IOS
+                    var detectedAnchorPose = detectedAnchors[anchorGuid].GetPose();
+#else
+                    var detectedAnchorPose = Pose.identity;
+#endif
+
+                    var anchoredObject = new GameObject($"Anchor - [{anchorGuid}]");
+                    anchoredObject.transform.SetPositionAndRotation(detectedAnchorPose.position, detectedAnchorPose.rotation);
+
+                    var attachedAnchor = anchoredObject.EnsureComponent<CloudNativeAnchor>();
+                    attachedAnchor.CloudToNative(detectedAnchors[anchorGuid]);
+
+                    AnchorLocated?.Invoke(anchorGuid, anchoredObject);
+                }
+                else
+                {
+                    var errorMessage = $"Anchor returned from service but Identifier was invalid [{args.Identifier}]";
+                    SpatialPersistenceError?.Invoke(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (Guid.TryParse(args.Identifier, out var anchorGuid))
+                {
+                    var errorMessage = $"An anchor [{anchorGuid}] was returned with invalid data\nError reported as {ex}";
+                    AnchorLocatedError?.Invoke(anchorGuid, errorMessage);
+                }
+                else
+                {
+                    var errorMessage = $"An Error Occurred retrieving the Anchor, Anchor ignored\n{ex}";
+                    SpatialPersistenceError?.Invoke(errorMessage);
+                }
+            }
+        }
+        #endregion Private Methods
     }
 }
