@@ -3,7 +3,7 @@
 
 using System;
 
-namespace RealityToolkit.Providers.SpatialPersistence
+namespace RealityToolkit.Modules.SpatialPersistence
 {
     internal static class ArrayExtensions
     {
