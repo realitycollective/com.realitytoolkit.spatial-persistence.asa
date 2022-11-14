@@ -68,16 +68,6 @@ namespace RealityToolkit.Modules.SpatialPersistence
 
         #region BaseService Implementation
         /// <inheritdoc />
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            if (!Application.isPlaying) { return; }
-
-            OnSessionInitialized();
-        }
-
-        /// <inheritdoc />
         public override void Destroy()
         {
             if (Application.isPlaying)
