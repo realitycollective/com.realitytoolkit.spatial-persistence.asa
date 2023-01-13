@@ -25,6 +25,7 @@ namespace RealityToolkit.SpatialPersistence.ASA.Editor
             return Path.GetFullPath(assetPath);
         }
 
+#if !UNITY_2021_1_OR_NEWER
         void IUnityLinkerProcessor.OnBeforeRun(BuildReport report, UnityLinkerBuildPipelineData data)
         {
         }
@@ -32,5 +33,6 @@ namespace RealityToolkit.SpatialPersistence.ASA.Editor
         void IUnityLinkerProcessor.OnAfterRun(BuildReport report, UnityLinkerBuildPipelineData data)
         {
         }
+#endif
     }
 }
