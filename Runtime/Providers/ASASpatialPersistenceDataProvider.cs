@@ -1,31 +1,33 @@
+// Copyright (c) Reality Collective. All rights reserved.
 // Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.Azure.SpatialAnchors;
 using Microsoft.Azure.SpatialAnchors.Unity;
+using RealityCollective.Extensions;
+using RealityCollective.ServiceFramework.Attributes;
+using RealityCollective.ServiceFramework.Definitions;
+using RealityCollective.ServiceFramework.Definitions.Platforms;
+using RealityCollective.ServiceFramework.Modules;
+using RealityCollective.Utilities.Async;
+using RealityToolkit.SpatialPersistence.Definitions;
+using RealityToolkit.SpatialPersistence.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
-using XRTK.Attributes;
-using XRTK.Definitions;
-using XRTK.Definitions.Platforms;
-using XRTK.Definitions.SpatialPersistence;
-using XRTK.Extensions;
-using XRTK.Interfaces.SpatialPersistence;
-using XRTK.Services;
-using XRTK.Utilities.Async;
+
 using Object = UnityEngine.Object;
 
-namespace XRTK.Providers.SpatialPersistence
+namespace RealityToolkit.SpatialPersistence.ASA
 {
     [RuntimePlatform(typeof(AndroidPlatform))]
     [RuntimePlatform(typeof(UniversalWindowsPlatform))]
     [System.Runtime.InteropServices.Guid("02963BCE-8519-4923-AE59-833953F6F13C")]
-    public class ASASpatialPersistenceDataProvider : BaseDataProvider, IMixedRealitySpatialPersistenceDataProvider
+    public class ASASpatialPersistenceDataProvider : BaseServiceModule, ISpatialPersistenceServiceModule
     {
-        private readonly IMixedRealitySpatialPersistenceSystem spatialPersistenceSystem;
+        private readonly ISpatialPersistenceSystem spatialPersistenceSystem;
         private readonly Dictionary<Guid, CloudSpatialAnchor> detectedAnchors = new Dictionary<Guid, CloudSpatialAnchor>();
 
         private SpatialAnchorManager cloudManager;
@@ -35,7 +37,7 @@ namespace XRTK.Providers.SpatialPersistence
         /// <inheritdoc />
         public bool IsRunning => cloudManager != null && cloudManager.IsSessionStarted;
 
-        public ASASpatialPersistenceDataProvider(string name, uint priority, BaseMixedRealityProfile profile, IMixedRealitySpatialPersistenceSystem parentService)
+        public ASASpatialPersistenceDataProvider(string name, uint priority, BaseProfile profile, ISpatialPersistenceSystem parentService)
             : base(name, priority, null, parentService)
         {
             spatialPersistenceSystem = parentService;
@@ -93,7 +95,7 @@ namespace XRTK.Providers.SpatialPersistence
 
         #endregion BaseExtensionService Implementation
 
-        #region IMixedRealitySpatialPersistenceDataProvider Implementation
+        #region ISpatialPersistenceServiceModule Implementation
 
         /// <inheritdoc />
         public void StartSpatialPersistenceProvider()
@@ -499,6 +501,6 @@ namespace XRTK.Providers.SpatialPersistence
 
         #endregion Events
 
-        #endregion IMixedRealitySpatialPersistenceDataProvider Implementation
+        #endregion ISpatialPersistenceServiceModule Implementation
     }
 }
