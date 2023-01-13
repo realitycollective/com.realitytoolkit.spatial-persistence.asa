@@ -1,3 +1,4 @@
+// Copyright (c) Reality Collective. All rights reserved.
 // Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
@@ -7,7 +8,7 @@ using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEditor.UnityLinker;
 
-namespace XRTK.SpatialPersistence.ASA.Editor
+namespace RealityToolkit.SpatialPersistence.ASA.Editor
 {
     public class LinkXmlInstaller : IUnityLinkerProcessor
     {
@@ -24,6 +25,7 @@ namespace XRTK.SpatialPersistence.ASA.Editor
             return Path.GetFullPath(assetPath);
         }
 
+#if !UNITY_2021_1_OR_NEWER
         void IUnityLinkerProcessor.OnBeforeRun(BuildReport report, UnityLinkerBuildPipelineData data)
         {
         }
@@ -31,5 +33,6 @@ namespace XRTK.SpatialPersistence.ASA.Editor
         void IUnityLinkerProcessor.OnAfterRun(BuildReport report, UnityLinkerBuildPipelineData data)
         {
         }
+#endif
     }
 }
