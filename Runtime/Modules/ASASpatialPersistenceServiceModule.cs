@@ -24,7 +24,7 @@ namespace RealityToolkit.Modules.SpatialPersistence
     public class ASASpatialPersistenceServiceModule : BaseSpatialPersistenceServiceModule, ISpatialPersistenceServiceModule
     {
         #region Private Properties
-        private readonly ISpatialPersistenceService spatialPersistenceSystem = null;
+        private readonly ISpatialPersistenceService spatialPersistenceService = null;
         private SpatialAnchorManager cloudManager;
         private AnchorLocateCriteria anchorLocateCriteria;
         private CloudSpatialAnchorWatcher currentWatcher;
@@ -62,7 +62,7 @@ namespace RealityToolkit.Modules.SpatialPersistence
         public ASASpatialPersistenceServiceModule(string name, uint priority, BaseProfile profile, ISpatialPersistenceService parentService)
             : base(name, priority, null, parentService)
         {
-            spatialPersistenceSystem = parentService;
+            spatialPersistenceService = parentService;
         }
         #endregion Constructor
 
