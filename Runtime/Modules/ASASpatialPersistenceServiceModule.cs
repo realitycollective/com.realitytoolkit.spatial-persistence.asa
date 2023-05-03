@@ -387,7 +387,7 @@ namespace RealityToolkit.Modules.SpatialPersistence
                 anchorLocateCriteria = new AnchorLocateCriteria();
 
                 // Register for Azure Spatial Anchor events
-                CloudManager.AnchorLocated += CloudManager_AnchorLocated;
+                CloudManager.AnchorLocated += cloudManager_AnchorLocated;
                 OnSessionStarted();
                 Debug.Log($"{nameof(ISpatialPersistenceServiceModule)}.{nameof(StartASASession)} successful");
             }
@@ -416,7 +416,7 @@ namespace RealityToolkit.Modules.SpatialPersistence
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void CloudManager_AnchorLocated(object sender, AnchorLocatedEventArgs args)
+        private void cloudManager_AnchorLocated(object sender, AnchorLocatedEventArgs args)
         {
             try
             {

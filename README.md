@@ -6,9 +6,9 @@ The Azure Spatial Anchors (SpatialPersistence.ASA) service module package for th
 
 The Spatial Persistence ASA (Azure Spatial Anchors) package for the [Spatial Persistence Service](https://github.com/realitycollective/com.realitytoolkit.spatial-persistence).
 
-[Microsoft Azure Spatial Anchors](https://azure.microsoft.com/en-us/services/spatial-anchors/#:~:text=%22Azure%20Spatial%20Anchors%20is%20the%20next%20step%20in,data%20at%20the%20right%20time%20across%20project%20phases.) vendor implementation for the Reality Toolkit [Spatial Persistence](https://github.com/realitycollective/com.realitytoolkit.spatial-persistence) System
+[Microsoft Azure Spatial Anchors](https://azure.microsoft.com/en-us/products/spatial-anchors.) vendor implementation for the Reality Toolkit [Spatial Persistence](https://github.com/realitycollective/com.realitytoolkit.spatial-persistence) Service
 
-## What's included?
+## What is included?
 
 - Azure Spatial Anchors Service Module
 
