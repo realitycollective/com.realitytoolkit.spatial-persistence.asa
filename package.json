@@ -12,7 +12,7 @@
     "spatial",
     "anchors"
   ],
-  "version": "1.0.0-pre-release.2",
+  "version": "1.0.0-pre.1",
   "unity": "2020.3",
   "homepage": "https://github.com/realitycollective",
   "bugs": {
@@ -29,8 +29,8 @@
     "url": "https://github.com/realitycollective"
   },
   "dependencies": {
-    "com.realitytoolkit.spatial-persistence": "1.0.0-pre-release.2",
-    "com.microsoft.azure.spatial-anchors-sdk.core": "2.11.0"
+    "com.realitytoolkit.spatial-persistence": "1.0.0-pre.1",
+    "com.microsoft.azure.spatial-anchors-sdk.core": "2.14.1"
   },
   "assets": [
     {
