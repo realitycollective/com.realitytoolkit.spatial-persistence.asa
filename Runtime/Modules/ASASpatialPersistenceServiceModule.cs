@@ -16,6 +16,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
+#if ARF5
+using Unity.XR.CoreUtils;
+#endif
+
 namespace RealityToolkit.Modules.SpatialPersistence
 {
     [RuntimePlatform(typeof(AndroidPlatform))]
@@ -40,11 +44,19 @@ namespace RealityToolkit.Modules.SpatialPersistence
                     cloudManager = GameObject.FindObjectOfType<SpatialAnchorManager>();
                     if (cloudManager.IsNull())
                     {
+#if ARF4
                         var ARSessionOrigin = GameObject.FindObjectOfType<ARSessionOrigin>();
                         if (ARSessionOrigin.IsNotNull())
                         {
                             cloudManager = ARSessionOrigin.gameObject.AddComponent<SpatialAnchorManager>();
                         }
+#elif ARF5
+                        var ARSessionOrigin = GameObject.FindObjectOfType<XROrigin>();
+                        if (ARSessionOrigin.IsNotNull())
+                        {
+                            cloudManager = ARSessionOrigin.gameObject.AddComponent<SpatialAnchorManager>();
+                        }
+#endif
 
                         if (cloudManager == null)
                         {
@@ -56,7 +68,7 @@ namespace RealityToolkit.Modules.SpatialPersistence
                 return cloudManager;
             }
         }
-        #endregion Private Properties
+#endregion Private Properties
 
         #region Constructor
         public ASASpatialPersistenceServiceModule(string name, uint priority, BaseProfile profile, ISpatialPersistenceService parentService)
