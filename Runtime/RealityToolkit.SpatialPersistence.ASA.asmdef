@@ -9,7 +9,8 @@
         "GUID:33d8827e6b886c24980a9ae3153d16c9",
         "GUID:cea456fb85d819645899d08b84466140",
         "GUID:d4aaefa3e06ea4bad82d59bf7ee4969f",
-        "GUID:9a6ddf5d388cc2b498e8a9d44bd289f0"
+        "GUID:9a6ddf5d388cc2b498e8a9d44bd289f0",
+        "GUID:dc960734dc080426fa6612f1c5fe95f3"
     ],
     "includePlatforms": [
         "Android",
@@ -23,6 +24,17 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.arfoundation",
+            "expression": "5.0.0",
+            "define": "ARF5"
+        },
+        {
+            "name": "com.unity.xr.arfoundation",
+            "expression": "[4.0.0,5.0.0]",
+            "define": "ARF4"
+        }
+    ],
     "noEngineReferences": false
 }
