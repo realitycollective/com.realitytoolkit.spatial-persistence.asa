@@ -44,10 +44,10 @@ namespace RealityToolkit.Modules.SpatialPersistence
                     cloudManager = GameObject.FindObjectOfType<SpatialAnchorManager>();
                     if (cloudManager.IsNull())
                     {
-#if ARF4
-                        var ARSessionOrigin = GameObject.FindObjectOfType<ARSessionOrigin>();
-#elif ARF5
+#if ARF5
                         var ARSessionOrigin = GameObject.FindObjectOfType<XROrigin>();
+#else
+                        var ARSessionOrigin = GameObject.FindObjectOfType<ARSessionOrigin>();
 #endif
                         if (ARSessionOrigin.IsNotNull())
                         {
