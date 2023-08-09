@@ -32,7 +32,7 @@
         },
         {
             "name": "com.unity.xr.arfoundation",
-            "expression": "[4.6.8]",
+            "expression": "[4.0.0,5.0.0]",
             "define": "ARF4"
         }
     ],
